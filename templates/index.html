@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Map Fire Risk Viewer</title>
+    <!-- Remove duplicate Leaflet loading - keep only one version -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Keep your existing styles -->
+
+    <style>
+            .error {
+        color: red;
+        font-weight: bold;
+         }
+        /* Map and Weather Info */
+        #map { height: 80vh; width: 100%; margin-top: 20px; }
+        #weather-info { margin-top: 10px; }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        /* Tabs for login and register */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Active tab styling */
+        .tabs button.active-tab {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+            border-bottom: 2px solid #0056b3;
+            cursor: default;
+        }
+
+        /* Form styling */
+        .form-content input[type="text"],
+        .form-content input[type="email"],
+        .form-content input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        .form-content button {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-content button:hover {
+            background-color: #218838;
+        }
+        /* Risk level colors */
+.very-high {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.high {
+    color: #ff6600;
+    font-weight: bold;
+}
+
+.moderate {
+    color: #ffcc00;
+    font-weight: bold;
+}
+
+.low {
+    color: #66cc00;
+    font-weight: bold;
+}
+
+.very-low {
+    color: #009900;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+
+    <!-- Modal Structure -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome! Please Login or Register</h2>
+
+            <!-- Tabs for switching between login and register forms -->
+            <div class="tabs">
+                <button onclick="toggleForm(true)" class="active-tab">Login</button>
+                <button onclick="toggleForm(false)">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="form-content">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button onclick="loginUser()">Login</button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="form-content" style="display: none;">
+                <input type="text" id="register-name" placeholder="Name" required>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="text" id="register-phone" placeholder="Phone">
+                <input type="text" id="register-location" placeholder="Location (lat,lng)">
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button onclick="registerUser()">Register</button>
+            </div>
+        </div>
+    </div>
+    <h1>World Map Fire Risk Viewer</h1>
+    <div id="map"></div>
+    <div id="weather-info">
+        <h3>Weather and Fire Risk Details</h3>
+        <p>Click on the map to get weather details for a location.</p>
+        <!-- Organize weather display elements -->
+        <p id="location"></p>
+        <p id="temperature"></p>
+        <p id="humidity"></p>
+        <p id="wind-speed"></p>
+        <p id="wind-direction"></p>
+        <p id="prediction"></p>
+    </div>
+
+
+    <script src="static/scripts.js"></script>
+</body>
+</html>

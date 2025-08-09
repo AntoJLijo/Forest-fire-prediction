@@ -1,0 +1,11 @@
+flask
+os
+joblib
+numpy
+flask_cors
+flask_bcrypt
+psycopg2
+jwt
+datetime
+xgboost
+twilio
